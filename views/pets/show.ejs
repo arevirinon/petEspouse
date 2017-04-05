@@ -1,0 +1,68 @@
+<% include ../partials/header %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-9">
+			<div class="thumbnail">
+				<img class="img-responsive" src="<%= pet.image %>" />
+				<div class="caption-full">
+					<h5 class="pull-right"><em>Posted by <strong><%= pet.author.username %></strong></em></h5>
+					<h4><a><%= pet.name %></a></h4>
+					<p><%= pet.description %></p>
+					<% if(currentUser && pet.author.id.equals(currentUser._id)){ %>
+						<a class="btn btn-warning" href="/pets/<%= pet.id %>/edit">Edit</a>
+						<form id="delete-form" action="/pets/<%= pet.id %>?_method=DELETE" method="POST">
+							<button class="btn btn-danger">Delete</button>
+						</form>
+					<% } %>
+				</div>
+			</div>
+			<div class="well">
+				<div class="text-right">
+					<a class="btn btn-success" href="/pets/<%= pet._id %>/comments/new">Add new comment</a>
+				</div>
+				<hr>
+				<% pet.comments.forEach(function(comment){ %>
+					<div class="row">
+						<div class="col-md-12">
+							<strong><%= comment.author.username %></strong>
+							<span class="pull-right">10 days ago</span>
+							<p><%= comment.text %></p>
+							<% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
+
+								<a class="btn btn-xs btn-warning" href="/pets/<%= pet._id %>/comments/<%= comment._id %>/edit">Edit</a>
+								<form action="/pets/<%= pet._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" id="delete-form">
+									<input type="submit" class="btn btn-xs btn-danger" value="Delete">
+								</form>
+							<% } %>
+						</div>
+					</div>
+				<%	}); %>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="list-group">
+				<!-- dismissible alert -->
+				<div class="alert alert-success alert-dismissible" role="alert">
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				  Below are the contact information provided by the owner. You may contact them through the number(s) provided or send them an email message.
+				</div>
+				<!-- end -->
+				<div class="panel panel-info">
+				  <div class="panel-heading">Owner's Contact Number</div>
+				  <div class="panel-body">
+				    <strong><%= pet.contactNum %></strong>
+				  </div>
+				</div>
+				<div class="panel panel-info">
+				  <div class="panel-heading">Owner's Email Address</div>
+				  <div class="panel-body">
+				    <strong><a href="mailto:<%= pet.emailAdd %>"><%= pet.emailAdd %></a></strong>
+				  </div>
+				</div>
+			</div>
+		</div>		
+	</div>
+</div>
+
+
+<% include ../partials/footer %>
