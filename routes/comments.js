@@ -6,7 +6,7 @@ var middleware = require("../middleware");
 
 //Comments New
 router.get("/new", middleware.isLoggedIn, function(req, res){
-    // find campground by id
+    // find post by id
     console.log(req.params.id);
     Pet.findById(req.params.id, function(err, pet){
         if(err){
@@ -19,7 +19,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 
 //Comments Create
 router.post("/", middleware.isLoggedIn, function(req, res){
-   //lookup campground using ID
+   //lookup post using ID
    Pet.findById(req.params.id, function(err, pet){
        if(err){
            console.log(err);

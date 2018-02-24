@@ -4,7 +4,7 @@ var Pet = require("../models/pet");
 var middleware = require("../middleware");
 
 router.get("/", function(req, res){
-	// Get all campgrounds from DB
+	// Get all post from DB
 	Pet.find({}, function(err, allpets){
 		if(err){
 			console.log(err);
@@ -28,13 +28,13 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 		username: req.user.username
 	};
 	var newPet = {name:name, image:image, description: desc, author: author, emailAdd: emailAdd, contactNum: contactNum};
-	// create new campground and save to DB
+	// create new post and save to DB
 	Pet.create(newPet, function(err, newlyCreated){
 		if(err){
 			console.log(err);
 		}
 		else{
-			// redirect back to campgrounds page
+			// redirect back to pet page
 			req.flash("success", "New entry has been added!");
 			res.redirect("/pets");	
 		}
@@ -45,7 +45,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 	res.render("pets/new");
 });
 
-// shows more info about one campground
+// shows more info about one pet
 router.get("/:id", function(req, res){
 	Pet.findById(req.params.id).populate("comments").exec(function(err, foundPet){
 		if(err){
@@ -57,15 +57,15 @@ router.get("/:id", function(req, res){
 	});
 });
 
-// EDIT CAMPGROUND ROUTE
+// EDIT POST ROUTE
 router.get("/:id/edit", middleware.checkPetOwnership, function(req, res){
     Pet.findById(req.params.id, function(err, foundPet){
         res.render("pets/edit", {pet: foundPet});
     });
 });
-// UPDATE CAMPGROUND ROUTE
+// UPDATE POST ROUTE
 router.put("/:id", middleware.checkPetOwnership, function(req, res){
-	// find and update the correct campground
+	// find and update the correct pet
 	Pet.findByIdAndUpdate(req.params.id, req.body.pet, function(err, updatedPet){
 		if(err){
 			res.redirect("/pets");
@@ -78,7 +78,7 @@ router.put("/:id", middleware.checkPetOwnership, function(req, res){
 	// redirect somewhere
 });
 
-// DESTROY CAMPGROUND ROUTE
+// DESTROY POST ROUTE
 router.delete("/:id", middleware.checkPetOwnership, function(req, res){
 	Pet.findByIdAndRemove(req.params.id, function(err){
 		if(err){
